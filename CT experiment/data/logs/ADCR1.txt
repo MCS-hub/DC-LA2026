@@ -1,0 +1,3 @@
+mode:DCLA_mul
+noise: 0.2
+Full parameters: Namespace(noise=0.2, seed=10, log_interval=2, iterates=2000, cp_interval=5000, data_path='./data/', alg='ADCR', cuda=True, outp=True, init=True, load='./data/nets_new/ADCR/limited/limited.pt', gpu=None, workers=4, detectors=700, clamping=0, eps=1e-05, expir=1, clip=1, size=16, mult=False, wclip=True, alpha=0.0, test_mode='DCLA_mul', K=1, n_channels=32, n_layers=10, comment='', momentum=0.5, batch_size_valid=1, sm=0.0001, burn_in=0, chains=100, init_noise=0.0, gamma=1e-05, ntest=1, init_std=0.0, lamb=0.0, pr_console=True)
