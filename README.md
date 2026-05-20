@@ -1,7 +1,13 @@
 # DC-LA: Difference-of-convex Langevin Algorithm
 
 
-## $\ell_1 - \ell_2$ prior
+## Environment Installation
+
+```bash
+conda env create -f environment.yml
+```
+
+## Synthetic experiments with $\ell_1 - \ell_2$ prior
 
 To obtain histograms of the samples from the three samplers in the 2D experiment, run the following.
 **Use multiple Markov chains and retain only the final samples from each chain.**
@@ -20,7 +26,7 @@ python l12_exp2_binKL.py
 ```bash
 python ablation.py
 ```
-## DCINNs prior
+## CT experiments with DCINNs prior
 
 We leverage the ADCR repo: https://github.com/YasminZhang/ADCR and the pretrained DCINNs parameters (limited.pt) provided by Yasi Zhang.
 The Mayo Grand Challenge data is from: https://aapm.app.box.com/s/eaw4jddb53keg1bptavvvd1sf4x3pe9h
