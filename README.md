@@ -1,66 +1,39 @@
-# Learning Difference-of-Convex Regularizers for Inverse Problems: A Flexible Framework with Theoretical Guarantees
-[![Static Badge](https://img.shields.io/badge/paper-arxiv_link-blue)
-](https://arxiv.org/abs/2502.00240) 
+# DC-LA: Difference-of-convex Langevin Algorithm
 
-## Environment Installation
+
+## $\ell_1 - \ell_2$ prior
+
+To obtain histograms of the samples from the three samplers in the 2D experiment, run the following.
+**Use multiple Markov chains and retain only the final samples from each chain.**
 ```bash
-conda env create -f environment.yml
+python l12_exp2.py
 ```
-If the installation fails using the environment.yml file, you can install the required packages manually.
-## Prepare Data(Mayo Grand Challenge)
-Please go to the [link](https://aapm.app.box.com/s/eaw4jddb53keg1bptavvvd1sf4x3pe9h) and download the data. Please put the data in the following path:
+**Use one chain, discarding burn-in samples**
 ```bash
-./data/[test/valid/train]
+python l12_exp.py
 ```
-
-In all of our experiments, we use 1mm B30 data of the highest precision. 
-
-
-
-## Run Our Algorithm(ADCR)
-example call:
+**To produce binned KL plots for comparisons**
 ```bash
-CUDA_VISIBLE_DEVICES=0 python train.py --setup=5 --dataperc=100 --epochs=1 --lr=1e-4 --eps=1e-6 --alg=ADCR --iterates=200 --valid=128 --test=True --batch-size=10 --noise=3.2 --seed=10  --setting=limited --load=./data/nets_new/ADCR/limited/limited.pt --test_mode=GD 
+python l12_exp2_binKL.py
 ```
-- epochs: number of epochs
-- lr: learning rate (used to train the neural network)
-- eps: step size for the optimization 
-- alg: algorithm to be used (ADR, TV, FBP, ADCR etc.), please take a look at files names in the Algorithms folder
-- iterates: maximum number of iterations for the optimization
-- valid: number of validation images
-- batch-size: batch size
-- detectors: number of detectors
-- noise: noise level
-- load: path to the checkpoint
-- seed: random seed
-- setting: limited or sparse
-- test_mode: GD or CCP or PSM
-- K: number of innner loop iterations for the CCP/PSM algorithm
-
-## Train a regularizer
-example call:
+**To perform ablation experiments on (lambda,gamma)**
 ```bash
-CUDA_VISIBLE_DEVICES=0 python train.py --setup=5 --dataperc=100 --epochs=20 --lr=1e-4 --eps=1e-5 --alg=ADCR --iterates=100 --valid=10 --batch-size=10  --gpu=1 --noise=3.2 --load=False --seed=10 --wclip=True --setting=sparse --mu=10
+python ablation.py
 ```
+## DCINNs prior
+
+We leverage the ADCR repo: https://github.com/YasminZhang/ADCR and the pretrained DCINNs parameters (limited.pt) provided by Yasi Zhang.
+The Mayo Grand Challenge data is from: https://aapm.app.box.com/s/eaw4jddb53keg1bptavvvd1sf4x3pe9h
+(here we put some Mayo data inside the tomo\valid and tomo\test folders)
 
 
-## Credits
-This code is based on the [CT_framework](https://github.com/Zakobian/CT_framework_).
+**To run DC-LA**
+```bash
+CUDA_VISIBLE_DEVICES=0 python train.py --alg=ADCR --iterates=2000 --noise=0.2 --seed=10 --load=./data/nets_new/ADCR/limited/limited.pt --test_mode=DCLA_mul --sm 1e-4 --chains=100 --ntest=1
+```
+Change `ntest` to access different CT scans.
 
-
-
-## Description of other methods
-* FBP (Filtered back-projection) 
-* TV (Total Variation)
-* ADR (Adversarial Regularizer): https://arxiv.org/abs/1805.11572
-* LG (Learned gradient descent): https://arxiv.org/abs/1704.04058
-* LPD (Learned primal dual): https://arxiv.org/abs/1707.06474
-* FL (Fully learned): https://nature.com/articles/nature25988.pdf
-* FBP+U (FBP with a U-Net denoiser): https://arxiv.org/abs/1505.04597
-* ACR: https://arxiv.org/abs/2008.02839
-* ACNCR: https://openreview.net/forum?id=yavtWi6ew9
-* AWCR: https://arxiv.org/abs/2402.01052
-* ADCR(ours)
-
-In order to add your own algorithms to the list, create a new file in the **Algorithms** folder in the form *name*.py and use BaseAlg.py as the template.
-
+**To run PSM for MAP estimation**
+```bash
+CUDA_VISIBLE_DEVICES=0 python train.py --eps=1e-6 --alg=ADCR --iterates=20000 --noise=0.2 --seed=10  --load=./data/nets_new/ADCR/limited/limited.pt --test_mode=PSM --ntest=1
+```
