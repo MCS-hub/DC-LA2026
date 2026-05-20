@@ -28,9 +28,9 @@ python ablation.py
 ```
 ## CT experiments with DCINNs prior
 
-We use the ADCR repository: https://github.com/YasminZhang/ADCR along with the pretrained DCINNs parameters (limited.pt) provided by Yasi Zhang.
+We use the ADCR repository: https://github.com/YasminZhang/ADCR along with the pretrained DCINNs parameters (`limited.pt`) provided by Yasi Zhang.
 The Mayo Grand Challenge data is from: https://aapm.app.box.com/s/eaw4jddb53keg1bptavvvd1sf4x3pe9h.
-For convenience, we include a subset of the Mayo data in the valid and test folders so the code can be run out of the box.
+For convenience, we include a subset of the Mayo data in the `valid` and `test` folders so the code can be run out of the box.
 
 **To run DC-LA**
 ```bash
